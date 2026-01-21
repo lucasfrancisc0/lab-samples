@@ -1,10 +1,11 @@
 import { PaginationParams } from '@/core/repositories/pagination-params';
 import { SampleStatusHistory } from '../../enterprise/entities/sample-status-history';
 
-export interface SampleStatusHistoryRepository {
-  findManyBySampleId(
+export abstract class SampleStatusHistoryRepository {
+  abstract findManyBySampleId(
     sampleId: string,
     params: PaginationParams,
   ): Promise<SampleStatusHistory[]>;
-  create(history: SampleStatusHistory): Promise<void>;
+
+  abstract create(history: SampleStatusHistory): Promise<void>;
 }

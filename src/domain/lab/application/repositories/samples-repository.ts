@@ -18,16 +18,16 @@ export interface FindManySamplesResult {
   total: number;
 }
 
-export interface SamplesRepository {
-  findById(id: string): Promise<Sample | null>;
-  findByCode(code: string): Promise<Sample | null>;
+export abstract class SamplesRepository {
+  abstract findById(id: string): Promise<Sample | null>;
+  abstract findByCode(code: string): Promise<Sample | null>;
 
-  findMany(
+  abstract findMany(
     filters: FindManySamplesFilters,
     params: PaginationParams,
     sort?: { by: SampleSortBy; dir: SortDir },
   ): Promise<FindManySamplesResult>;
 
-  create(sample: Sample): Promise<void>;
-  save(sample: Sample): Promise<void>;
+  abstract create(sample: Sample): Promise<void>;
+  abstract save(sample: Sample): Promise<void>;
 }
