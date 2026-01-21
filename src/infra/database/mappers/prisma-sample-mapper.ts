@@ -4,7 +4,10 @@ import {
 } from 'generated/prisma/client';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Sample } from '@/domain/lab/enterprise/entities/sample';
-import { SampleStatus } from '@/domain/lab/enterprise/value-objects/sample-status';
+import {
+  toDomainSampleStatus,
+  toPrismaSampleStatus,
+} from './prisma-sample-status-mapper';
 
 export class PrismaSampleMapper {
   static toDomain(raw: PrismaSample): Sample {
@@ -13,7 +16,7 @@ export class PrismaSampleMapper {
         code: raw.code,
         analysisType: raw.analysisType,
         collectedAt: raw.collectedAt,
-        status: raw.status as unknown as SampleStatus,
+        status: toDomainSampleStatus(raw.status),
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
       },
@@ -35,7 +38,7 @@ export class PrismaSampleMapper {
       code: sample.code,
       analysisType: sample.analysisType,
       collectedAt: sample.collectedAt,
-      status: sample.status as unknown as PrismaSampleStatus,
+      status: toPrismaSampleStatus(sample.status),
       createdAt: sample.createdAt,
       updatedAt: sample.updatedAt,
     };
