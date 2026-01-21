@@ -6,10 +6,11 @@ import {
   SortDir,
 } from '@/domain/lab/application/repositories/samples-repository';
 import { PaginationParams } from '@/core/repositories/pagination-params';
+import { toPrismaSampleStatus } from '../mappers/prisma-sample-status-mapper';
 import { Sample } from '@/domain/lab/enterprise/entities/sample';
 import { PrismaSampleMapper } from '../mappers/prisma-sample-mapper';
-import { SampleStatus } from '@/domain/lab/enterprise/value-objects/sample-status';
 import { PrismaService } from '../prisma/prisma.service';
+import { Prisma } from 'generated/prisma/client';
 
 export class PrismaSamplesRepository implements SamplesRepository {
   constructor(private prisma: PrismaService) {}
@@ -42,17 +43,25 @@ export class PrismaSamplesRepository implements SamplesRepository {
     const skip = (page - 1) * perPage;
     const take = perPage;
 
-    const where: any = {};
+    const where: Prisma.SampleWhereInput = {};
 
     if (filters.code) where.code = filters.code;
     if (filters.analysisType) where.analysisType = filters.analysisType;
-    if (filters.status)
-      where.status = filters.status as unknown as SampleStatus;
+
+    if (filters.status) {
+      where.status = toPrismaSampleStatus(filters.status);
+    }
 
     if (filters.collectedFrom || filters.collectedTo) {
       where.collectedAt = {};
-      if (filters.collectedFrom) where.collectedAt.gte = filters.collectedFrom;
-      if (filters.collectedTo) where.collectedAt.lte = filters.collectedTo;
+
+      if (filters.collectedFrom) {
+        where.collectedAt.gte = filters.collectedFrom;
+      }
+
+      if (filters.collectedTo) {
+        where.collectedAt.lte = filters.collectedTo;
+      }
     }
 
     const by: SampleSortBy = sort?.by ?? 'collectedAt';
@@ -99,7 +108,6 @@ export class PrismaSamplesRepository implements SamplesRepository {
         analysisType: data.analysisType,
         collectedAt: data.collectedAt,
         status: data.status,
-        updatedAt: data.updatedAt,
       },
     });
   }
