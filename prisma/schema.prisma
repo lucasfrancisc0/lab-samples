@@ -7,3 +7,42 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum SampleStatus {
+  PENDENTE
+  EM_ANALISE
+  CONCLUIDA
+  APROVADA
+  REJEITADA
+}
+
+model Sample {
+  id           String       @id @default(uuid())
+  code         String       @unique
+  analysisType String
+  collectedAt  DateTime
+  status       SampleStatus @default(PENDENTE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  history SampleStatusHistory[]
+
+  @@index([status])
+  @@index([analysisType])
+  @@index([collectedAt])
+  @@map("samples")
+}
+
+model SampleStatusHistory {
+  id         String       @id @default(uuid())
+  sampleId   String
+  fromStatus SampleStatus
+  toStatus   SampleStatus
+  changedAt  DateTime     @default(now())
+
+  sample Sample @relation(fields: [sampleId], references: [id], onDelete: Cascade)
+
+  @@index([sampleId, changedAt])
+  @@map("sample_status_history")
+}
