@@ -7,6 +7,7 @@ import { SampleStatusHistory } from '../../enterprise/entities/sample-status-his
 
 import { SampleNotFoundError } from '../errors/sample-not-found.error';
 import { InvalidStatusTransitionError } from '../errors/invalid-status-transition.error';
+import { SampleStatusHistoryRepository } from '../repositories/sample-status-history-repository';
 
 interface ChangeSampleStatusUseCaseRequest {
   sampleId: string;
@@ -24,9 +25,7 @@ type ChangeSampleStatusUseCaseResponse = Either<
 export class ChangeSampleStatusUseCase {
   constructor(
     private samplesRepository: SamplesRepository,
-    private historyRepository: {
-      create(history: SampleStatusHistory): Promise<void>;
-    },
+    private historyRepository: SampleStatusHistoryRepository,
   ) {}
 
   async execute({
@@ -47,8 +46,6 @@ export class ChangeSampleStatusUseCase {
       return left(changeResult.value);
     }
 
-    await this.samplesRepository.save(sample);
-
     const history = SampleStatusHistory.create({
       sampleId: new UniqueEntityID(sampleId),
       fromStatus,
@@ -56,6 +53,8 @@ export class ChangeSampleStatusUseCase {
     });
 
     await this.historyRepository.create(history);
+
+    await this.samplesRepository.save(sample);
 
     return right({
       sampleId,
