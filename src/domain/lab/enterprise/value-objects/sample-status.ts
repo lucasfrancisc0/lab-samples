@@ -1,0 +1,7 @@
+export enum SampleStatus {
+  PENDENTE = 'PENDENTE',
+  EM_ANALISE = 'EM_ANALISE',
+  CONCLUIDA = 'CONCLUIDA',
+  APROVADA = 'APROVADA',
+  REJEITADA = 'REJEITADA',
+}
