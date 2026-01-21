@@ -1,6 +1,8 @@
 import { Entity } from '@/core/entities/entity';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Optional } from '@/core/types/optional';
+import { Either, left, right } from '@/core/either';
+
 import { SampleStatus } from '../value-objects/sample-status';
 import { ensureValidStatusTransition } from '../rules/status-transition';
 import { InvalidCollectedAtError } from '../../application/errors/invalid-collected-at.error';
@@ -51,11 +53,11 @@ export class Sample extends Entity<SampleProps> {
   static create(
     props: Optional<SampleProps, 'status' | 'createdAt' | 'updatedAt'>,
     id?: UniqueEntityID,
-  ) {
+  ): Either<InvalidCollectedAtError, Sample> {
     const now = new Date();
 
     if (props.collectedAt.getTime() > now.getTime()) {
-      throw new InvalidCollectedAtError(props.collectedAt);
+      return left(new InvalidCollectedAtError(props.collectedAt));
     }
 
     const sample = new Sample(
@@ -68,6 +70,6 @@ export class Sample extends Entity<SampleProps> {
       id,
     );
 
-    return sample;
+    return right(sample);
   }
 }

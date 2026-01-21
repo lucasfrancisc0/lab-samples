@@ -1,8 +1,9 @@
 import { Either, left, right } from '@/core/either';
-import { Sample } from '../../enterprise/entities/sample';
+
 import { SamplesRepository } from '../repositories/samples-repository';
 import { SampleAlreadyExistsError } from '../errors/sample-already-exists.error';
 import { InvalidCollectedAtError } from '../errors/invalid-collected-at.error';
+import { Sample } from '../../enterprise/entities/sample';
 
 interface CreateSampleUseCaseRequest {
   code: string;
@@ -31,17 +32,17 @@ export class CreateSampleUseCase {
       return left(new SampleAlreadyExistsError(code));
     }
 
-    const now = new Date();
-
-    if (collectedAt.getTime() > now.getTime()) {
-      return left(new InvalidCollectedAtError(collectedAt));
-    }
-
-    const sample = Sample.create({
+    const sampleOrError = Sample.create({
       code,
       analysisType,
       collectedAt,
     });
+
+    if (sampleOrError.isLeft()) {
+      return left(sampleOrError.value);
+    }
+
+    const sample = sampleOrError.value;
 
     await this.samplesRepository.create(sample);
 
