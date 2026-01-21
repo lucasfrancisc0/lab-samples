@@ -1,5 +1,4 @@
 import { SampleStatus } from '../value-objects/sample-status';
-import { InvalidStatusTransitionError } from '../../application/errors/invalid-status-transition.error';
 
 const transitions = new Map<SampleStatus, Set<SampleStatus>>([
   [SampleStatus.PENDENTE, new Set([SampleStatus.EM_ANALISE])],
@@ -12,13 +11,9 @@ const transitions = new Map<SampleStatus, Set<SampleStatus>>([
   [SampleStatus.REJEITADA, new Set()],
 ]);
 
-export function ensureValidStatusTransition(
+export function canChangeSampleStatus(
   from: SampleStatus,
   to: SampleStatus,
-): void {
-  const allowed = transitions.get(from);
-
-  if (!allowed?.has(to)) {
-    throw new InvalidStatusTransitionError(from, to);
-  }
+): boolean {
+  return transitions.get(from)?.has(to) ?? false;
 }

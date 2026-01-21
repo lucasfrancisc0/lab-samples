@@ -4,8 +4,9 @@ import { Optional } from '@/core/types/optional';
 import { Either, left, right } from '@/core/either';
 
 import { SampleStatus } from '../value-objects/sample-status';
-import { ensureValidStatusTransition } from '../rules/status-transition';
 import { InvalidCollectedAtError } from '../../application/errors/invalid-collected-at.error';
+import { canChangeSampleStatus } from '../rules/status-transition';
+import { InvalidStatusTransitionError } from '../../application/errors/invalid-status-transition.error';
 
 export interface SampleProps {
   code: string;
@@ -43,11 +44,17 @@ export class Sample extends Entity<SampleProps> {
     return this.props.updatedAt;
   }
 
-  changeStatus(to: SampleStatus) {
-    ensureValidStatusTransition(this.status, to);
+  changeStatus(to: SampleStatus): Either<InvalidStatusTransitionError, {}> {
+    const allowed = canChangeSampleStatus(this.status, to);
+
+    if (!allowed) {
+      return left(new InvalidStatusTransitionError(this.status, to));
+    }
 
     this.props.status = to;
     this.props.updatedAt = new Date();
+
+    return right({});
   }
 
   static create(
