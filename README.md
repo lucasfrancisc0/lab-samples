@@ -7,7 +7,7 @@ API REST para gerenciamento de amostras laboratoriais: cadastro, consulta com fi
 - Node.js + NestJS
 - Prisma ORM
 - PostgreSQL (Docker)
-- Vitest (testes unitários)
+- Vitest (testes unitários e E2E)
 
 ---
 
@@ -192,6 +192,12 @@ curl "http://localhost:3333/samples/<id>/history?page=1"
 
 ```bash
 pnpm test
+```
+
+### E2E tests
+
+```bash
+pnpm test:e2e
 ```
 
 ---
