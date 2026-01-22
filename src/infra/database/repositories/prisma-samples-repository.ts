@@ -11,9 +11,8 @@ import { Sample } from '@/domain/lab/enterprise/entities/sample';
 import { PrismaSampleMapper } from '../mappers/prisma-sample-mapper';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from 'generated/prisma/client';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 
-Injectable();
 export class PrismaSamplesRepository implements SamplesRepository {
   constructor(
     @Inject(PrismaService)
