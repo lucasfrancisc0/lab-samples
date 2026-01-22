@@ -1,98 +1,204 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Lab Samples API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST para gerenciamento de amostras laboratoriais: cadastro, consulta com filtros, atualização de status com regras de transição e histórico.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Stack
 
-## Description
+- Node.js + NestJS
+- Prisma ORM
+- PostgreSQL (Docker)
+- Vitest (testes unitários)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+## Como rodar (dev)
+
+### 1) Subir o banco
 
 ```bash
-$ pnpm install
+docker compose up -d
 ```
 
-## Compile and run the project
+### 2) Variáveis de ambiente
+
+Crie um arquivo `.env` na raiz:
+
+```env
+PORT=3333
+DATABASE_URL="postgresql://postgres:docker@localhost:5432/lab-samples?schema=public"
+DATABASE_SCHEMA=public
+```
+
+### 3) Instalar dependências
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+pnpm install
 ```
 
-## Run tests
+### 4) Rodar migrations
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm prisma migrate dev
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 5) Rodar a API
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+pnpm start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+A aplicação estará disponível em: `http://localhost:3333`
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## Regras de negócio
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- `code` deve ser **único** (não permite duplicado).
+- `collectedAt` **não pode** ser uma data futura.
+- Fluxo de status permitido:
+  - `PENDENTE -> EM_ANALISE -> CONCLUIDA -> (APROVADA | REJEITADA)`
+- Toda mudança de status gera um registro no **histórico**.
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Endpoints
 
-## Stay in touch
+### 1) Criar amostra
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+`POST /samples`
 
-## License
+**Body**
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```json
+{
+  "code": "LAB-0001",
+  "analysisType": "ANALISE_AGUA",
+  "collectedAt": "2026-01-21T10:00:00.000Z"
+}
+```
+
+**Respostas**
+
+- `201 Created`
+- `409 Conflict` (código duplicado)
+- `400 Bad Request` (payload inválido / data futura)
+
+**cURL**
+
+```bash
+curl -X POST http://localhost:3333/samples \
+  -H "Content-Type: application/json" \
+  -d '{"code":"LAB-0001","analysisType":"ANALISE_AGUA","collectedAt":"2026-01-21T10:00:00.000Z"}'
+```
+
+---
+
+### 2) Listar/consultar amostras (filtros, ordenação, paginação)
+
+`GET /samples`
+
+**Query params**
+
+- `code` (string)
+- `analysisType` (string)
+- `status` (`PENDENTE | EM_ANALISE | CONCLUIDA | APROVADA | REJEITADA`)
+- `collectedFrom` (datetime ISO)
+- `collectedTo` (datetime ISO)
+- `sortBy` (`collectedAt | code | status`)
+- `sortDir` (`asc | desc`)
+- `page` (number >= 1)
+
+**Exemplo**
+
+```bash
+curl "http://localhost:3333/samples?status=PENDENTE&sortBy=collectedAt&sortDir=desc&page=1"
+```
+
+**Respostas**
+
+- `200 OK`
+
+---
+
+### 3) Buscar amostra por id
+
+`GET /samples/:id`
+
+**Respostas**
+
+- `200 OK`
+- `404 Not Found`
+
+**cURL**
+
+```bash
+curl "http://localhost:3333/samples/<id>"
+```
+
+---
+
+### 4) Atualizar status da amostra
+
+`PATCH /samples/:id/status`
+
+**Body**
+
+```json
+{
+  "toStatus": "EM_ANALISE"
+}
+```
+
+**Respostas**
+
+- `200 OK`
+- `404 Not Found` (amostra não encontrada)
+- `422 Unprocessable Entity` (transição inválida)
+
+**cURL**
+
+```bash
+curl -X PATCH "http://localhost:3333/samples/<id>/status" \
+  -H "Content-Type: application/json" \
+  -d '{"toStatus":"EM_ANALISE"}'
+```
+
+---
+
+### 5) Histórico de status
+
+`GET /samples/:id/history`
+
+**Query params**
+
+- `page` (number >= 1)
+
+**Respostas**
+
+- `200 OK`
+- `404 Not Found`
+
+**cURL**
+
+```bash
+curl "http://localhost:3333/samples/<id>/history?page=1"
+```
+
+---
+
+## Testes
+
+### Unit tests
+
+```bash
+pnpm test
+```
+
+---
+
+## Códigos HTTP usados
+
+- `400 Bad Request`: validação de entrada / data futura
+- `404 Not Found`: recurso não encontrado
+- `409 Conflict`: código da amostra duplicado
+- `422 Unprocessable Entity`: transição de status inválida
