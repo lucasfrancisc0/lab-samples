@@ -22,7 +22,7 @@ type CreateSampleUseCaseResponse = Either<
 export class CreateSampleUseCase {
   constructor(
     @Inject(SamplesRepository)
-    private samplesRepository: SamplesRepository
+    private samplesRepository: SamplesRepository,
   ) {}
 
   async execute({

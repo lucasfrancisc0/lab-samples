@@ -1,4 +1,4 @@
-import { SampleStatusHistory } from '@/domain/lab/enterprise/entities/sample-status-history'
+import { SampleStatusHistory } from '@/domain/lab/enterprise/entities/sample-status-history';
 
 export class SampleStatusHistoryPresenter {
   static toHTTP(item: SampleStatusHistory) {
@@ -8,6 +8,6 @@ export class SampleStatusHistoryPresenter {
       fromStatus: item.fromStatus,
       toStatus: item.toStatus,
       changedAt: item.changedAt,
-    }
+    };
   }
 }

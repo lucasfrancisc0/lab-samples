@@ -35,6 +35,6 @@ export class PrismaSampleStatusHistoryRepository implements SampleStatusHistoryR
       take,
     });
 
-    return items.map(PrismaSampleStatusHistoryMapper.toDomain);
+    return items.map((item) => PrismaSampleStatusHistoryMapper.toDomain(item));
   }
 }

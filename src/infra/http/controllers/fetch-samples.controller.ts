@@ -64,7 +64,9 @@ export class FetchSamplesController {
 
     return {
       total: result.value.result.total,
-      items: result.value.result.items.map(SamplePresenter.toHTTP),
+      items: result.value.result.items.map((item) =>
+        SamplePresenter.toHTTP(item),
+      ),
     };
   }
 }

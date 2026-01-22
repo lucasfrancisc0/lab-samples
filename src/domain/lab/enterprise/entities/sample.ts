@@ -44,7 +44,7 @@ export class Sample extends Entity<SampleProps> {
     return this.props.updatedAt;
   }
 
-  changeStatus(to: SampleStatus): Either<InvalidStatusTransitionError, {}> {
+  changeStatus(to: SampleStatus): Either<InvalidStatusTransitionError, null> {
     const allowed = canChangeSampleStatus(this.status, to);
 
     if (!allowed) {
@@ -54,7 +54,7 @@ export class Sample extends Entity<SampleProps> {
     this.props.status = to;
     this.props.updatedAt = new Date();
 
-    return right({});
+    return right(null);
   }
 
   static create(

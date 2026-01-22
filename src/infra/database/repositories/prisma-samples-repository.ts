@@ -90,7 +90,7 @@ export class PrismaSamplesRepository implements SamplesRepository {
     ]);
 
     return {
-      items: items.map(PrismaSampleMapper.toDomain),
+      items: items.map((item) => PrismaSampleMapper.toDomain(item)),
       total,
     };
   }

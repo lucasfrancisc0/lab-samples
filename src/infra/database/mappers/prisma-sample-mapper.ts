@@ -1,7 +1,4 @@
-import {
-  Sample as PrismaSample,
-  SampleStatus as PrismaSampleStatus,
-} from 'generated/prisma/client';
+import { Sample as PrismaSample } from 'generated/prisma/client';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Sample } from '@/domain/lab/enterprise/entities/sample';
 import {

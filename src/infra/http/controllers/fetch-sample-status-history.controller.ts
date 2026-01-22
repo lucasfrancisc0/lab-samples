@@ -44,7 +44,9 @@ export class FetchSampleStatusHistoryController {
     }
 
     return {
-      items: result.value.history.map(SampleStatusHistoryPresenter.toHTTP),
+      items: result.value.history.map((item) =>
+        SampleStatusHistoryPresenter.toHTTP(item),
+      ),
     };
   }
 }

@@ -1,27 +1,27 @@
-import { SampleStatus as PrismaSampleStatus } from 'generated/prisma/client'
-import { SampleStatus } from '@/domain/lab/enterprise/value-objects/sample-status'
+import { SampleStatus as PrismaSampleStatus } from 'generated/prisma/client';
+import { SampleStatus } from '@/domain/lab/enterprise/value-objects/sample-status';
 
 function assertNever(x: never): never {
-  throw new Error(`Unexpected status value: ${String(x)}`)
+  throw new Error(`Unexpected status value: ${String(x)}`);
 }
 
 export function toDomainSampleStatus(status: PrismaSampleStatus): SampleStatus {
   switch (status) {
     case 'PENDENTE':
-      return SampleStatus.PENDENTE
+      return SampleStatus.PENDENTE;
     case 'EM_ANALISE':
-      return SampleStatus.EM_ANALISE
+      return SampleStatus.EM_ANALISE;
     case 'CONCLUIDA':
-      return SampleStatus.CONCLUIDA
+      return SampleStatus.CONCLUIDA;
     case 'APROVADA':
-      return SampleStatus.APROVADA
+      return SampleStatus.APROVADA;
     case 'REJEITADA':
-      return SampleStatus.REJEITADA
+      return SampleStatus.REJEITADA;
     default:
-      return assertNever(status)
+      return assertNever(status);
   }
 }
 
 export function toPrismaSampleStatus(status: SampleStatus): PrismaSampleStatus {
-  return status as unknown as PrismaSampleStatus
+  return status as unknown as PrismaSampleStatus;
 }
