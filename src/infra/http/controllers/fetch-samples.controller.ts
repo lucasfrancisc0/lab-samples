@@ -9,6 +9,7 @@ import {
   SampleSortBy,
   SortDir,
 } from '@/domain/lab/application/repositories/samples-repository';
+import { FetchSamplesDocs } from './docs/fetch-samples.swagger';
 
 const fetchSamplesQuerySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
@@ -33,6 +34,7 @@ export class FetchSamplesController {
   constructor(private fetchSamples: FetchSamplesUseCase) {}
 
   @Get()
+  @FetchSamplesDocs()
   async handle(@Query(queryValidationPipe) query: FetchSamplesQuery) {
     const collectedFrom = query.collectedFrom
       ? new Date(query.collectedFrom)

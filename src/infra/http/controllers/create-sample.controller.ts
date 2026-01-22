@@ -12,6 +12,7 @@ import { CreateSampleUseCase } from '@/domain/lab/application/use-cases/create-s
 import { SampleAlreadyExistsError } from '@/domain/lab/application/errors/sample-already-exists.error';
 import { InvalidCollectedAtError } from '@/domain/lab/application/errors/invalid-collected-at.error';
 import { SamplePresenter } from '../presenters/sample-presenter';
+import { CreateSampleDocs } from './docs/create-sample.swagger';
 
 const createSampleBodySchema = z.object({
   code: z.string().min(1),
@@ -27,6 +28,7 @@ export class CreateSampleController {
   constructor(private createSample: CreateSampleUseCase) {}
 
   @Post()
+  @CreateSampleDocs()
   async handle(@Body(bodyValidationPipe) body: CreateSampleBody) {
     const collectedAt = new Date(body.collectedAt);
 

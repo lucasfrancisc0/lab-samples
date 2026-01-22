@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe';
 import { FetchSampleStatusHistoryUseCase } from '@/domain/lab/application/use-cases/fetch-sample-status-history';
 import { SampleStatusHistoryPresenter } from '../presenters/sample-status-history-presenter';
+import { FetchSampleStatusHistoryDocs } from './docs/fetch-sample-status-history.swagger';
 
 const fetchHistoryParamSchema = z.object({
   id: z.string().uuid(),
@@ -30,6 +31,7 @@ export class FetchSampleStatusHistoryController {
   constructor(private fetchHistory: FetchSampleStatusHistoryUseCase) {}
 
   @Get()
+  @FetchSampleStatusHistoryDocs()
   async handle(
     @Param(paramValidationPipe) params: FetchHistoryParam,
     @Query(queryValidationPipe) query: FetchHistoryQuery,

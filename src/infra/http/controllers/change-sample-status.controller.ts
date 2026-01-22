@@ -14,6 +14,7 @@ import { ChangeSampleStatusUseCase } from '@/domain/lab/application/use-cases/ch
 import { SampleStatus } from '@/domain/lab/enterprise/value-objects/sample-status';
 import { SampleNotFoundError } from '@/domain/lab/application/errors/sample-not-found.error';
 import { InvalidStatusTransitionError } from '@/domain/lab/application/errors/invalid-status-transition.error';
+import { ChangeSampleStatusDocs } from './docs/change-sample-status.swagger';
 
 const changeStatusParamSchema = z.object({
   id: z.string().uuid(),
@@ -33,6 +34,7 @@ export class ChangeSampleStatusController {
   constructor(private changeStatus: ChangeSampleStatusUseCase) {}
 
   @Patch()
+  @ChangeSampleStatusDocs()
   async handle(
     @Param(paramValidationPipe) params: ChangeStatusParam,
     @Body(bodyValidationPipe) body: ChangeStatusBody,
