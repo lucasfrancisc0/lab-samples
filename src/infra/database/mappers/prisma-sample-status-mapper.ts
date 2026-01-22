@@ -22,6 +22,16 @@ export function toDomainSampleStatus(status: PrismaSampleStatus): SampleStatus {
   }
 }
 
+const domainToPrisma: Record<SampleStatus, PrismaSampleStatus> = {
+  [SampleStatus.PENDENTE]: 'PENDENTE',
+  [SampleStatus.EM_ANALISE]: 'EM_ANALISE',
+  [SampleStatus.CONCLUIDA]: 'CONCLUIDA',
+  [SampleStatus.APROVADA]: 'APROVADA',
+  [SampleStatus.REJEITADA]: 'REJEITADA',
+};
+
 export function toPrismaSampleStatus(status: SampleStatus): PrismaSampleStatus {
-  return status as unknown as PrismaSampleStatus;
+  const mapped = domainToPrisma[status];
+  if (!mapped) throw new Error(`Unmapped SampleStatus: ${String(status)}`);
+  return mapped;
 }
