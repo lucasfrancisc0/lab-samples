@@ -25,7 +25,7 @@ Crie um arquivo `.env` na raiz:
 
 ```env
 PORT=3333
-DATABASE_URL="postgresql://postgres:docker@localhost:5432/lab-samples?schema=public"
+DATABASE_URL="postgresql://postgres:docker@localhost:5432/lab-db?schema=public"
 DATABASE_SCHEMA=public
 ```
 
