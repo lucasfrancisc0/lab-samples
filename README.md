@@ -2,6 +2,13 @@
 
 API REST para gerenciamento de amostras laboratoriais: cadastro, consulta com filtros, atualização de status com regras de transição e histórico.
 
+## 📚 Documentação
+
+- Swagger UI: `http://localhost:3333/docs`
+
+> Este README contém instruções e exemplos rápidos. Para schemas completos de request/response e testes interativos, utilize o Swagger.
+
+
 ## Stack
 
 - Node.js + NestJS
