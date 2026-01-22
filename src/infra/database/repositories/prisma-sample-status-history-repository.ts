@@ -3,9 +3,14 @@ import { SampleStatusHistoryRepository } from '@/domain/lab/application/reposito
 import { SampleStatusHistory } from '@/domain/lab/enterprise/entities/sample-status-history';
 import { PrismaSampleStatusHistoryMapper } from '../mappers/prisma-sample-status-history-mapper';
 import { PrismaService } from '../prisma/prisma.service';
+import { Inject, Injectable } from '@nestjs/common';
 
+@Injectable()
 export class PrismaSampleStatusHistoryRepository implements SampleStatusHistoryRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @Inject(PrismaService)
+    private prisma: PrismaService,
+  ) {}
 
   async create(history: SampleStatusHistory): Promise<void> {
     const data = PrismaSampleStatusHistoryMapper.toPrisma(history);

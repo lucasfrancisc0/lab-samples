@@ -4,6 +4,7 @@ import { SamplesRepository } from '../repositories/samples-repository';
 import { SampleAlreadyExistsError } from '../errors/sample-already-exists.error';
 import { InvalidCollectedAtError } from '../errors/invalid-collected-at.error';
 import { Sample } from '../../enterprise/entities/sample';
+import { Inject } from '@nestjs/common';
 
 interface CreateSampleUseCaseRequest {
   code: string;
@@ -19,7 +20,10 @@ type CreateSampleUseCaseResponse = Either<
 >;
 
 export class CreateSampleUseCase {
-  constructor(private samplesRepository: SamplesRepository) {}
+  constructor(
+    @Inject(SamplesRepository)
+    private samplesRepository: SamplesRepository
+  ) {}
 
   async execute({
     code,

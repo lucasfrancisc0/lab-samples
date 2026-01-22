@@ -3,6 +3,7 @@ import { Either, left, right } from '@/core/either';
 import { SamplesRepository } from '../repositories/samples-repository';
 import { Sample } from '../../enterprise/entities/sample';
 import { SampleNotFoundError } from '../errors/sample-not-found.error';
+import { Inject } from '@nestjs/common';
 
 interface GetSampleByIdUseCaseRequest {
   sampleId: string;
@@ -16,7 +17,10 @@ type GetSampleByIdUseCaseResponse = Either<
 >;
 
 export class GetSampleByIdUseCase {
-  constructor(private samplesRepository: SamplesRepository) {}
+  constructor(
+    @Inject(SamplesRepository)
+    private samplesRepository: SamplesRepository,
+  ) {}
 
   async execute({
     sampleId,

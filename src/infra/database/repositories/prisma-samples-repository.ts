@@ -11,9 +11,14 @@ import { Sample } from '@/domain/lab/enterprise/entities/sample';
 import { PrismaSampleMapper } from '../mappers/prisma-sample-mapper';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from 'generated/prisma/client';
+import { Inject, Injectable } from '@nestjs/common';
 
+Injectable();
 export class PrismaSamplesRepository implements SamplesRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @Inject(PrismaService)
+    private prisma: PrismaService,
+  ) {}
 
   async findById(id: string): Promise<Sample | null> {
     const sample = await this.prisma.sample.findUnique({

@@ -8,6 +8,7 @@ import {
   SampleSortBy,
   SortDir,
 } from '../repositories/samples-repository';
+import { Inject } from '@nestjs/common';
 
 interface FetchSamplesUseCaseRequest {
   filters?: FindManySamplesFilters;
@@ -26,7 +27,10 @@ type FetchSamplesUseCaseResponse = Either<
 >;
 
 export class FetchSamplesUseCase {
-  constructor(private samplesRepository: SamplesRepository) {}
+  constructor(
+    @Inject(SamplesRepository)
+    private samplesRepository: SamplesRepository,
+  ) {}
 
   async execute({
     filters,

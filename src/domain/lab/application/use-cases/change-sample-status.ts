@@ -8,6 +8,8 @@ import { SampleStatusHistory } from '../../enterprise/entities/sample-status-his
 import { SampleNotFoundError } from '../errors/sample-not-found.error';
 import { InvalidStatusTransitionError } from '../errors/invalid-status-transition.error';
 import { SampleStatusHistoryRepository } from '../repositories/sample-status-history-repository';
+import { Inject } from '@nestjs/common';
+import { inject } from 'vitest';
 
 interface ChangeSampleStatusUseCaseRequest {
   sampleId: string;
@@ -24,6 +26,7 @@ type ChangeSampleStatusUseCaseResponse = Either<
 
 export class ChangeSampleStatusUseCase {
   constructor(
+    @Inject(SamplesRepository)
     private samplesRepository: SamplesRepository,
     private historyRepository: SampleStatusHistoryRepository,
   ) {}
