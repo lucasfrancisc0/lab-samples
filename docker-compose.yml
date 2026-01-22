@@ -8,8 +8,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: lab-db
+      PGDATA: /var/lib/postgresql/data/pgdata 
     volumes:
-      - pgdata:/var/lib/postgresql
+      - pgdata:/var/lib/postgresql/data/pgdata
     restart: unless-stopped
 
 volumes:
